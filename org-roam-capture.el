@@ -579,16 +579,15 @@ capture target."
       ('entry
        (advice-add #'org-capture-place-entry :after #'org-roam-capture--create-id-for-entry)
        (org-roam-capture--put :new-node-p t)
-       (setq id (org-roam-node-id org-roam-capture--node)))
-      (_
-       (save-excursion
-         (goto-char p)
-         (unless (org-entry-get p "ID")
-           (org-roam-capture--put :new-node-p t))
-         (setq id (or (org-entry-get p "ID")
-                      (org-roam-node-id org-roam-capture--node)))
-         (setf (org-roam-node-id org-roam-capture--node) id)
-         (org-entry-put p "ID" id))))
+       (setq id (org-roam-node-id org-roam-capture--node))))
+    (save-excursion
+      (goto-char p)
+      (unless (org-entry-get p "ID")
+        (org-roam-capture--put :new-node-p t))
+      (setq id (or (org-entry-get p "ID")
+                   (org-roam-node-id org-roam-capture--node)))
+      (setf (org-roam-node-id org-roam-capture--node) id)
+      (org-entry-put p "ID" id))
     (org-roam-capture--put :id id)
     (org-roam-capture--put :target-entry-p target-entry-p)
     (advice-add #'org-capture-place-template :before #'org-roam-capture--set-target-entry-p-a)
