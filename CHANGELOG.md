@@ -54,7 +54,7 @@
 - [#2080](https://github.com/org-roam/org-roam/pull/2080) dailies: prevent multiple "dailies/" subdir expansions
 - [#2055](https://github.com/org-roam/org-roam/pull/2055) dailies: removed stray f require, which was causing require and compilation errors
 - [#2117](https://github.com/org-roam/org-roam/pull/2117) capture: preserve trailing whitespace content in capture templates
-
+- [#2056](https://github.com/org-roam/org-roam/pull/2056) capture: IDs are now created for entries in capture templates
 ### Changed
 - [#2060](https://github.com/org-roam/org-roam/pull/2060) node: added double acute accent normalization for Unicode characters in titles
 - [#2040](https://github.com/org-roam/org-roam/pull/2040) completions: fix completions display-width for Helm users
@@ -73,7 +73,7 @@
 ### Removed
 ### Changed
 - [#1795](https://github.com/org-roam/org-roam/pull/1795) buffer: optimized reflinks fetch
-- [#1809](https://github.com/org-roam/org-roam/pull/1809) capture: the mandatory `:if-new` property of each capture template is now renamed to `:target`
+- [#1809](https://github.com/org-roam/org-roam/pull/1809) capture: the mandatory `:if-new` property of each capture template is now renamed to  `:target`
 - [#1829](https://github.com/org-roam/org-roam/pull/1829) perf: file sql updates are now wrapped in a transaction
 - [#1877](https://github.com/org-roam/org-roam/pull/1877) dailies: stop asking for time, only date
 - [#1949](https://github.com/org-roam/org-roam/pull/1949) db: check for property drawers are now case-insensitive
