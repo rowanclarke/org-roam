@@ -469,6 +469,7 @@ capture target."
   (if-let ((id (run-hook-with-args-until-success 'org-roam-capture-preface-hook)))
       (org-roam-capture--put :id id)
     (org-roam-capture--setup-target-location))
+  (org-roam-capture--adjust-point-for-capture-type)
   (let ((template (org-capture-get :template)))
     (when (stringp template)
       (org-capture-put
@@ -476,6 +477,36 @@ capture target."
        (org-roam-capture--fill-template template))))
   (org-roam-capture--put :finalize (or (org-capture-get :finalize)
                                        (org-roam-capture--get :finalize))))
+(defun org-roam-capture--adjust-point-for-capture-type (&optional pos)
+  "Reposition the point for template insertion dependently on the capture type.
+Return the newly adjusted position of `point'.
+
+POS is the current position of point (an integer) inside the
+currently active capture buffer, where the adjustment should
+start to begin from. If it's nil, then it will default to
+the current value of `point'."
+  (or pos (setq pos (point)))
+  (goto-char pos)
+  (let ((location-type (if (= pos 1) 'beginning-of-file 'heading-at-point)))
+    (and (eq location-type 'heading-at-point)
+         (cl-assert (org-at-heading-p)))
+    (pcase (org-capture-get :type)
+      (`plain
+       (cl-case location-type
+         (beginning-of-file
+          (if (org-capture-get :prepend)
+              (let ((el (org-element-at-point)))
+                (while (and (not (eobp))
+                            (memq (org-element-type el)
+                                  '(drawer property-drawer keyword comment comment-block horizontal-rule)))
+                  (goto-char (org-element-property :end el))
+                  (setq el (org-element-at-point))))
+            (goto-char (org-entry-end-position))))
+         (heading-at-point
+          (if (org-capture-get :prepend)
+              (org-end-of-meta-data t)
+            (goto-char (org-entry-end-position))))))))
+  (point))
 
 (defun org-roam-capture--setup-target-location ()
   "Initialize the buffer, and goto the location of the new capture."
